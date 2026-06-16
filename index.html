@@ -705,7 +705,7 @@
     }
 
     function updateStrength(bits) {
-      el.strengthLabel.textContent = Math.round(bits) + " bits";
+      el.strengthLabel.textContent = bits.toFixed(2) + " bits";
     }
 
     function render() {
