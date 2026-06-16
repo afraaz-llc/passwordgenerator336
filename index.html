@@ -386,7 +386,7 @@
       <input id="length" type="range" min="4" max="64" value="25">
       <input id="lengthValue" class="length-value" type="number" min="4" max="64" value="25" aria-label="Password length (number)">
       <span class="strength" aria-live="polite">
-        <span class="strength-label">Strength —</span><span id="strengthLabel" class="strength-value">—</span>
+        <span class="strength-label">Entropy:</span><span id="strengthLabel" class="strength-value">—</span>
       </span>
     </section>
 
@@ -705,12 +705,7 @@
     }
 
     function updateStrength(bits) {
-      let label;
-      if (bits < 40) label = "weak";
-      else if (bits < 60) label = "fair";
-      else if (bits < 80) label = "good";
-      else label = "strong";
-      el.strengthLabel.textContent = label;
+      el.strengthLabel.textContent = Math.round(bits) + " bits";
     }
 
     function render() {
