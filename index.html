@@ -81,7 +81,6 @@
       flex: 1 0 auto;
     }
 
-    /* Wordmark */
     .wordmark {
       font-family: var(--mono);
       font-size: 28px;
@@ -359,7 +358,6 @@
     .toggle.on { background: var(--accent); border-color: var(--accent); }
     .toggle.on::after { background: var(--on-accent); transform: translateX(18px); }
 
-    /* Footer */
     .site-footer {
       width: 100%;
       max-width: 720px;
@@ -972,14 +970,12 @@
     });
     el.historyClear.addEventListener("click", clearHistory);
 
-    // Bulk
     el.bulkGenerate.addEventListener("click", generateBulk);
     el.bulkCopy.addEventListener("click", copyBulk);
     el.bulkCount.addEventListener("blur", () => {
       el.bulkCount.value = clampCount(el.bulkCount, 1);
     });
 
-    // Settings URL
     el.copySettingsUrl.addEventListener("click", copySettingsUrl);
 
     // Theme toggle (Light / Dark): session-only, and captured in the settings URL
