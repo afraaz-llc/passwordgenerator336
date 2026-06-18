@@ -46,6 +46,16 @@
       --mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
     }
 
+    /* Light theme: same cyan brand, darkened to a readable teal on a warm off-white. */
+    :root[data-theme="light"] {
+      --accent: #0a8585;
+      --bg: #f5f4f0;
+      --text: #1c1b18;
+      --muted: #71706a;
+      --border: #d6d5cf;
+      --on-accent: #f5f4f0;
+    }
+
     * { box-sizing: border-box; }
 
     html, body { background: var(--bg); }
@@ -359,10 +369,23 @@
       border-top: 1px solid var(--border);
       font-size: 13px;
       color: var(--muted);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
     .site-footer a { color: var(--accent); text-decoration: none; }
     .site-footer a:hover { text-decoration: underline; }
     .site-footer .sep { margin: 0 8px; }
+    .theme-toggle {
+      background: none;
+      border: 0;
+      padding: 0;
+      font: inherit;
+      font-size: 13px;
+      color: var(--accent);
+      cursor: pointer;
+    }
+    .theme-toggle:hover { text-decoration: underline; }
 
     @media (max-width: 600px) {
       body { padding: 32px 20px 50px; }
@@ -507,9 +530,12 @@
   </main>
 
   <footer class="site-footer">
-    <a href="privacy.html">Privacy</a>
-    <span class="sep">·</span>
-    <a href="https://github.com/afraazali42/passwordgenerator336" target="_blank" rel="noopener">GitHub</a>
+    <span class="footer-left">
+      <a href="privacy.html">Privacy</a>
+      <span class="sep">·</span>
+      <a href="https://github.com/afraazali42/passwordgenerator336" target="_blank" rel="noopener">GitHub</a>
+    </span>
+    <button id="themeToggle" class="theme-toggle" type="button" aria-label="Switch to light mode">Light</button>
   </footer>
 
   <script>
@@ -525,6 +551,7 @@
       autoSelect: false,
       saveHistory: false,
       historyCount: 10,
+      theme: "dark",
     };
 
     const el = {
@@ -558,6 +585,7 @@
       historyList: document.getElementById("historyList"),
       historyClear: document.getElementById("historyClear"),
       copySettingsUrl: document.getElementById("copySettingsUrl"),
+      themeToggle: document.getElementById("themeToggle"),
     };
 
     // Default character sets, anything not matching the default goes into the shareable URL
@@ -584,6 +612,7 @@
       for (const [elKey, def] of Object.entries(DEFAULT_CHARS)) {
         if (el[elKey].value !== def) params.set(elKey, el[elKey].value);
       }
+      if (state.theme !== "dark") params.set("theme", state.theme);
       return location.origin + location.pathname + "?" + params.toString();
     }
 
@@ -607,6 +636,9 @@
       for (const elKey of Object.keys(DEFAULT_CHARS)) {
         if (params.has(elKey)) el[elKey].value = params.get(elKey);
       }
+      if (params.has("theme")) {
+        state.theme = params.get("theme") === "light" ? "light" : "dark";
+      }
     }
 
     async function copySettingsUrl() {
@@ -622,6 +654,18 @@
         document.body.removeChild(ta);
       }
       showToast("URL copied");
+    }
+
+    function setTheme(theme) {
+      state.theme = theme === "light" ? "light" : "dark";
+      const root = document.documentElement;
+      if (state.theme === "light") root.setAttribute("data-theme", "light");
+      else root.removeAttribute("data-theme");
+      el.themeToggle.textContent = state.theme === "dark" ? "Light" : "Dark";
+      el.themeToggle.setAttribute("aria-label",
+        "Switch to " + (state.theme === "dark" ? "light" : "dark") + " mode");
+      const tc = document.querySelector('meta[name="theme-color"]');
+      if (tc) tc.setAttribute("content", state.theme === "light" ? "#f5f4f0" : "#1a1a1a");
     }
 
     // Cryptographically secure, unbiased integer in [0, max)
@@ -938,8 +982,12 @@
     // Settings URL
     el.copySettingsUrl.addEventListener("click", copySettingsUrl);
 
+    // Theme toggle (Light / Dark): session-only, and captured in the settings URL
+    el.themeToggle.addEventListener("click", () => setTheme(state.theme === "dark" ? "light" : "dark"));
+
     // Apply settings from ?... URL params first, so they win over hardcoded defaults
     loadSettingsFromURL();
+    setTheme(state.theme);
 
     // Initialize history UI from localStorage
     loadHistoryState();

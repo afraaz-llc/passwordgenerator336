@@ -31,6 +31,17 @@
       --mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
     }
 
+    /* Light theme follows the visitor's OS setting (this page has no toggle). */
+    @media (prefers-color-scheme: light) {
+      :root {
+        --accent: #0a8585;
+        --bg: #f5f4f0;
+        --text: #1c1b18;
+        --muted: #71706a;
+        --border: #d6d5cf;
+      }
+    }
+
     * { box-sizing: border-box; }
     html, body { background: var(--bg); }
 
