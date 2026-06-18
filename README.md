@@ -12,7 +12,7 @@ dependencies, no backend.
 - Bulk generation up to 100 at a time.
 - Optional history (stored locally in your browser only, never sent anywhere).
 - Light or dark theme.
-- Available in 10 languages, auto-detected from the browser (with a manual picker).
+- Available in 18 languages, auto-detected from the browser (with a manual picker).
 - Shareable settings URL: bookmark your exact configuration, including theme and language.
 
 ## How it works
