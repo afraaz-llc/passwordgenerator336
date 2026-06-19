@@ -31,15 +31,13 @@
       --mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
     }
 
-    /* Light theme follows the visitor's OS setting (this page has no toggle). */
-    @media (prefers-color-scheme: light) {
-      :root {
-        --accent: #0a8585;
-        --bg: #f5f4f0;
-        --text: #1c1b18;
-        --muted: #71706a;
-        --border: #d6d5cf;
-      }
+    /* Light theme, toggled from the footer (matches the generator page). */
+    :root[data-theme="light"] {
+      --accent: #0a8585;
+      --bg: #f5f4f0;
+      --text: #1c1b18;
+      --muted: #71706a;
+      --border: #d6d5cf;
     }
 
     * { box-sizing: border-box; }
@@ -117,10 +115,23 @@
       border-top: 1px solid var(--border);
       font-size: 13px;
       color: var(--muted);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
     .site-footer a { color: var(--accent); text-decoration: none; }
     .site-footer a:hover { text-decoration: underline; }
     .site-footer .sep { margin: 0 8px; }
+    .theme-toggle {
+      background: none;
+      border: 0;
+      padding: 0;
+      font: inherit;
+      font-size: 13px;
+      color: var(--accent);
+      cursor: pointer;
+    }
+    .theme-toggle:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
@@ -158,9 +169,28 @@
   </main>
 
   <footer class="site-footer">
-    <a href="/">Generator</a>
-    <span class="sep">·</span>
-    <a href="https://github.com/afraazali42/passwordgenerator336" target="_blank" rel="noopener">GitHub</a>
+    <span class="footer-left">
+      <a href="/">Generator</a>
+      <span class="sep">·</span>
+      <a href="https://github.com/afraazali42/passwordgenerator336" target="_blank" rel="noopener">GitHub</a>
+    </span>
+    <button id="themeToggle" class="theme-toggle" type="button" aria-label="Switch to light mode">Light</button>
   </footer>
+
+  <script>
+    "use strict";
+    const root = document.documentElement;
+    const toggle = document.getElementById("themeToggle");
+    const tc = document.querySelector('meta[name="theme-color"]');
+    function setTheme(theme) {
+      const light = theme === "light";
+      if (light) root.setAttribute("data-theme", "light");
+      else root.removeAttribute("data-theme");
+      toggle.textContent = light ? "Dark" : "Light";
+      toggle.setAttribute("aria-label", "Switch to " + (light ? "dark" : "light") + " mode");
+      if (tc) tc.setAttribute("content", light ? "#f5f4f0" : "#1a1a1a");
+    }
+    toggle.addEventListener("click", () => setTheme(root.getAttribute("data-theme") === "light" ? "dark" : "light"));
+  </script>
 </body>
 </html>
