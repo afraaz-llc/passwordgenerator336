@@ -1,5 +1,7 @@
 # Password Generator 336
 
+**Live at [passwordgenerator336.com](https://passwordgenerator336.com)**
+
 A fast, private password generator. One static HTML file. No build step, no
 dependencies, no backend.
 
@@ -85,10 +87,9 @@ device is the optional history list, and only when you turn it on.
 
 ## Privacy
 
-All password generation happens in your browser. No password is ever sent over
-the network. There is no analytics, no tracking, and no third-party scripts.
-The only data written to local storage is the optional history list, and only
-when you explicitly enable it.
+No analytics, no tracking, no cookies, no third-party scripts, no data
+collection. Full details in the
+[privacy policy](https://passwordgenerator336.com/privacy).
 
 ## License
 
