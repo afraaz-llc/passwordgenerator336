@@ -163,6 +163,9 @@
     .advanced summary::before { content: "+ "; color: var(--accent); }
     .advanced[open] summary::before { content: "− "; }
     .advanced[open] summary { margin-bottom: 6px; }
+    /* Light mode: these disclosures are interactive, so make them as dark as the main
+       labels (the muted gray read a bit too light for them specifically). */
+    :root[data-theme="light"] .advanced summary { color: var(--text); }
 
     /* Small inline number inputs (length, bulk count, history count) */
     .count-input,
