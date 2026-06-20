@@ -960,9 +960,10 @@
       if (tc) tc.setAttribute("content", state.theme === "light" ? "#f5f4f0" : "#1a1a1a");
     }
 
-    // Theme + language live in the URL only (no localStorage). navQuery() is the
-    // theme/lang query string; mirror it to the address bar (so a refresh keeps
-    // the look) and onto the Privacy link (so it carries across pages).
+    // Theme, language, and length live in the URL only (no localStorage). navQuery()
+    // is the theme/lang string for the cross-page Privacy link (length is generator-
+    // only); persistState() mirrors theme, lang, and length to the address bar so a
+    // refresh keeps them.
     function navQuery() {
       const p = new URLSearchParams();
       if (state.theme === "light") p.set("theme", "light");
@@ -974,10 +975,11 @@
       const privacyLink = document.querySelector('.footer-left a[href^="privacy"]');
       if (privacyLink) privacyLink.setAttribute("href", "privacy.html" + navQuery());
     }
-    function persistThemeLang() {
+    function persistState() {
       const params = new URLSearchParams(location.search);
       if (state.theme === "light") params.set("theme", "light"); else params.delete("theme");
       if (state.lang !== "en") params.set("lang", state.lang); else params.delete("lang");
+      if (el.length.value !== "25") params.set("len", el.length.value); else params.delete("len");
       const qs = params.toString();
       try { history.replaceState(null, "", location.pathname + (qs ? "?" + qs : "")); } catch (e) {}
       updateNavLinks();
@@ -1267,16 +1269,19 @@
       return Math.max(1, Math.min(100, parseInt(input.value, 10) || fallback));
     }
 
-    // Length slider <-> number input sync
+    // Length slider <-> number input sync. persistState() writes the length to the
+    // URL (on slider release / number commit) so it survives a refresh, like theme.
     el.length.addEventListener("input", () => {
       el.lengthValue.value = el.length.value;
       render();
     });
+    el.length.addEventListener("change", persistState);
     el.lengthValue.addEventListener("input", () => {
       const v = parseInt(el.lengthValue.value, 10);
       if (!isNaN(v) && v >= MIN_LEN && v <= MAX_LEN) {
         el.length.value = v;
         render();
+        persistState();
       }
     });
     el.lengthValue.addEventListener("blur", () => {
@@ -1286,6 +1291,7 @@
       el.lengthValue.value = v;
       el.length.value = v;
       render();
+      persistState();
     });
 
     setToggle("upper", el.upper);
@@ -1334,10 +1340,10 @@
     el.copySettingsUrl.addEventListener("click", copySettingsUrl);
 
     // Theme toggle (Light / Dark): no localStorage — the choice persists via the URL
-    el.themeToggle.addEventListener("click", () => { setTheme(state.theme === "dark" ? "light" : "dark"); persistThemeLang(); });
+    el.themeToggle.addEventListener("click", () => { setTheme(state.theme === "dark" ? "light" : "dark"); persistState(); });
 
     // Language picker: overrides the auto-detected language and persists via the URL
-    el.langSelect.addEventListener("change", () => { setLang(el.langSelect.value, true); persistThemeLang(); });
+    el.langSelect.addEventListener("change", () => { setLang(el.langSelect.value, true); persistState(); });
 
     // Apply settings from ?... URL params first, so they win over hardcoded defaults
     loadSettingsFromURL();
