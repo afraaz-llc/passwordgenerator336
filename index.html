@@ -358,6 +358,9 @@
     }
     .toggle.on { background: var(--accent); border-color: var(--accent); }
     .toggle.on::after { background: var(--on-accent); transform: translateX(18px); }
+    /* Light mode keeps the brighter teal on the toggles: the text accent is darkened
+       for contrast, but the toggles are UI (not text) and read better with more pop. */
+    :root[data-theme="light"] .toggle.on { background: #0a8585; border-color: #0a8585; }
 
     .site-footer {
       width: 100%;
