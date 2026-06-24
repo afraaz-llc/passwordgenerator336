@@ -64,12 +64,6 @@ than the last (sampling without replacement). The readout instead sums
 `log2(choices)` across every position, so the bit count reflects the keyspace an
 attacker would really face.
 
-## Privacy
-
-No analytics, no tracking, no cookies, no third-party scripts, no data
-collection. Full details in the
-[privacy policy](https://passwordgenerator336.com/privacy).
-
 ## License
 
 [GPL-3.0](LICENSE)
