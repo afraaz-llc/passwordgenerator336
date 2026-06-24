@@ -64,15 +64,6 @@ than the last (sampling without replacement). The readout instead sums
 `log2(choices)` across every position, so the bit count reflects the keyspace an
 attacker would really face.
 
-### Nothing leaves the page
-
-Everything above runs in the page's inline script. After the page loads it makes
-no network requests at all, and the Content-Security-Policy header
-(`connect-src 'none'`) tells the browser to block any that might somehow be
-attempted. You can watch this in your browser's Network tab, or simply save the
-file and run it with no internet connection. The only thing ever written to your
-device is the optional history list, and only when you turn it on.
-
 ## Privacy
 
 No analytics, no tracking, no cookies, no third-party scripts, no data
